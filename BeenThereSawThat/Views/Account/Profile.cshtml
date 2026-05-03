@@ -1,0 +1,386 @@
+﻿@model BeenThereSawThat.Models.ProfileViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>@Model.Username · Been There Saw That</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #f6eef3;
+            color: #3b1d2a;
+            min-width: 1100px;
+        }
+
+        /* --- HEADER & BANNER --- */
+        .header {
+            position: relative;
+            height: 300px;
+            background: #e6b3c7;
+            overflow: visible; /* Profil fotosunun taşması için */
+        }
+
+            .header::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 1;
+            }
+
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
+        .site-name {
+            position: absolute;
+            top: 20px;
+            left: 32px;
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: bold;
+            z-index: 5;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* --- PROFILE AREA --- */
+        .profile {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 32px 60px;
+            position: relative;
+        }
+
+        .profile-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: -80px; /* Fotoğrafı yukarı (banner üzerine) taşır */
+            position: relative;
+            z-index: 10;
+        }
+
+        .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid #f6eef3;
+            background: #f2c6d6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+            .avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+            .profile-actions button, .profile-actions a {
+                background: #ffffff;
+                color: #7a2d4f;
+                border: 1px solid #e0a4bb;
+                border-radius: 20px;
+                padding: 10px 20px;
+                font-size: 14px;
+                cursor: pointer;
+                text-decoration: none;
+                font-weight: 600;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                transition: 0.3s;
+            }
+
+                .profile-actions a:hover {
+                    background: #fef0f5;
+                }
+
+        .logout {
+            border-color: #d67a9c !important;
+            color: #b44b73 !important;
+        }
+
+        /* --- INFO AREA --- */
+        .profile-info {
+            margin-top: 20px;
+        }
+
+        .username-tag {
+            font-size: 32px;
+            color: #7a2d4f;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .about {
+            margin-top: 10px;
+            max-width: 700px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .fav-film {
+            display: inline-block;
+            margin-top: 15px;
+            background: #e6b3c7;
+            color: #7a2d4f;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+            .nav-buttons a {
+                background: #d98aa8;
+                color: #ffffff;
+                border-radius: 25px;
+                padding: 12px 28px;
+                font-size: 15px;
+                text-decoration: none;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+                .nav-buttons a:hover {
+                    background: #c87997;
+                    transform: scale(1.05);
+                }
+
+        /* --- MOVIE GRID & CARDS --- */
+        .recent {
+            margin-top: 60px;
+        }
+
+            .recent h2 {
+                border-bottom: 2px solid #e6b3c7;
+                padding-bottom: 10px;
+                color: #7a2d4f;
+            }
+
+        .recent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .movie-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+            .movie-card:hover {
+                transform: translateY(-10px);
+            }
+
+        .card-poster {
+            position: relative;
+            height: 350px;
+        }
+
+            .card-poster img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .card-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(122, 45, 79, 0.9);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .card-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .movie-title {
+            margin: 0;
+            color: #3b1d2a;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .movie-date {
+            font-size: 14px;
+            color: #b86b89;
+            margin: 6px 0;
+            font-weight: 500;
+        }
+
+        .movie-director {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 12px;
+        }
+
+        .movie-note {
+            font-style: italic;
+            font-size: 14px;
+            color: #666;
+            background: #fff0f5;
+            padding: 12px;
+            border-left: 4px solid #e6b3c7;
+            border-radius: 4px;
+            line-height: 1.4;
+        }
+
+        .card-actions {
+            display: flex;
+            padding: 15px;
+            gap: 10px;
+            background: #fafafa;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-edit, .btn-delete {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            border: none;
+            transition: 0.2s;
+        }
+
+        .btn-edit {
+            background: #e6b3c7;
+            color: #7a2d4f;
+        }
+
+            .btn-edit:hover {
+                background: #d9a2ba;
+            }
+
+        .btn-delete {
+            background: #8b1e3f;
+            color: #fff;
+        }
+
+            .btn-delete:hover {
+                background: #6b1731;
+            }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img class="banner-img" src="@(string.IsNullOrEmpty(Model.BannerUrl) ? "/images/default-banner.jpg" : Model.BannerUrl)" />
+        <div class="site-name">Been There Saw That</div>
+    </div>
+
+    <div class="profile">
+        <div class="profile-top">
+            <div class="avatar">
+                <img src="@(string.IsNullOrEmpty(Model.ProfilePictureUrl) ? "/images/default-avatar.png" : Model.ProfilePictureUrl)" />
+            </div>
+
+            <div class="profile-actions">
+                <a asp-controller="Account" asp-action="EditProfile">Profili Düzenle</a>
+                <form asp-controller="Account" asp-action="Logout" method="post" style="display: inline;">
+                    <button type="submit" class="logout">Oturumu Kapat</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="profile-info">
+            <div class="username-tag">@@@Model.Username</div>
+            <div class="about">
+                @(string.IsNullOrEmpty(Model.Bio) ? "Henüz bir biyografi eklenmemiş." : Model.Bio)
+            </div>
+            <div class="fav-film">
+                ⭐ Favori Film: @(string.IsNullOrEmpty(Model.FavoriteMovie) ? "Belirtilmemiş" : Model.FavoriteMovie)
+            </div>
+            <div class="nav-buttons">
+                <a asp-controller="Movie" asp-action="AddMovie">+ Film Ekle</a>
+            </div>
+        </div>
+
+        <div class="recent">
+            <h2>İzlenen Filmler</h2>
+
+            <div class="recent-grid">
+                @if (Model.RecentMovies != null && Model.RecentMovies.Any())
+                {
+                    foreach (var film in Model.RecentMovies)
+                    {
+                        <div class="movie-card">
+                            <div class="card-poster">
+                                <img src="@(string.IsNullOrEmpty(film.PosterPath) ? "/images/default-movie.jpg" : film.PosterPath)" alt="@film.Title" />
+                                <div class="card-rating">@film.Rating</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="movie-title">@film.Title</h3>
+                                <p class="movie-date">📅 @film.Date.ToString("dd.MM.yyyy")</p>
+                                <p class="movie-director">🎬 <strong>Yönetmen:</strong> @film.Director</p>
+                                @if (!string.IsNullOrEmpty(film.Note))
+                                {
+                                    <div class="movie-note">
+                                        "@film.Note"
+                                    </div>
+                                }
+                            </div>
+                            <div class="card-actions">
+                                <a asp-controller="Movie" asp-action="EditMovie" asp-route-id="@film.MovieId" class="btn-edit">Düzenle</a>
+                                <form asp-controller="Movie" asp-action="DeleteMovie" asp-route-id="@film.MovieId" method="post" onsubmit="return confirm('Bu filmi silmek istediğine emin misin?');" style="flex:1;">
+                                    <button type="submit" class="btn-delete" style="width: 100%;">Sil</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p style="grid-column: span 3; text-align:center; padding: 40px; color: #b86b89; font-weight: bold;">
+                        Henüz izlenen bir film bulunamadı. Hadi ilk filmini ekle!
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

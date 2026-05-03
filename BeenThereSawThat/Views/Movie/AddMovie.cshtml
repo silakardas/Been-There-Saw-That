@@ -1,0 +1,153 @@
+﻿@model BeenThereSawThat.Models.MovieViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Film Kaydı</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #1a0a12;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Segoe UI, sans-serif;
+            color: #3a0f22;
+        }
+
+        .container {
+            width: 900px;
+            height: 550px;
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #f3c2d4;
+        }
+
+        .visual {
+            flex: 1;
+            background: #2d1320;
+            position: relative;
+        }
+
+            .visual h1 {
+                color: #fff;
+                padding: 40px;
+            }
+
+        .form-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 16px;
+            border: none;
+            background: #2a0f1c;
+            color: #f7c6d9;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 20px;
+            border: none;
+            background: #8b1e3f;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+            .row > div {
+                flex: 1;
+            }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="visual">
+            <h1>film günlüğü</h1>
+        </div>
+
+        <div class="form-area">
+            <h2>Film Kaydı</h2>
+
+            <div asp-validation-summary="All" class="error"></div>
+
+            <form asp-action="AddMovie" asp-controller="Movie" method="post" enctype="multipart/form-data">
+               
+                    
+                    
+
+                <label>Poster</label>
+                <input type="file" asp-for="Poster" accept="image/*" />
+
+                <label>Film Adı</label>
+                <input asp-for="Title" />
+
+                <div class="row">
+                    <div>
+                        <label>Tarih</label>
+                        <input type="date" asp-for="Date" />
+                    </div>
+                    <div>
+                        <label>Puan</label>
+                        <select asp-for="Rating">
+                            <option value="">Seçiniz</option>
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="1">⭐</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Tür</label>
+                <input asp-for="Genre" />
+
+                <label>Yönetmen</label>
+                <input asp-for="Director" />
+
+                <label>Replik / Not</label>
+                <textarea asp-for="Note"></textarea>
+
+                <button type="submit">
+                    @(Model?.MovieId > 0 ? "Güncelle" : "Kaydet")
+                </button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

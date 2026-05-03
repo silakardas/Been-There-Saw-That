@@ -1,0 +1,283 @@
+﻿@model BeenThereSawThat.Models.EditProfileViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Profil Düzenle · Been There Saw That</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #f6eef3;
+            color: #3b1d2a;
+            min-width: 1100px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            background: #ffffff;
+            border-radius: 26px;
+            padding: 40px 46px 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #8a4a65;
+            margin-bottom: 36px;
+        }
+
+        .media-section {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .banner-preview {
+            flex: 1;
+            height: 160px;
+            border-radius: 20px;
+            background: #e6b3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a2e40;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .banner-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0.9;
+            }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid #e0a4bb;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f2c6d6;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+        }
+
+            .avatar-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #6a344a;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid #e0a4bb;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+            input:focus, textarea:focus {
+                border-color: #d98aa8;
+            }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .fav-film-input {
+            background: #fefaff;
+            border: 1px dashed #d98aa8;
+            color: #3b1d2a;
+            font-weight: 500;
+        }
+
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .actions button, .actions a {
+            border-radius: 22px;
+            padding: 12px 22px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .save {
+            background: #d98aa8;
+            color: #fff;
+        }
+
+        .cancel {
+            background: transparent;
+            color: #7a2d4f;
+            border: 1px solid #e0a4bb;
+            line-height: normal;
+        }
+
+        .danger {
+            background: none;
+            color: #b44b73;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <form asp-controller="Account" asp-action="EditProfile" method="post" enctype="multipart/form-data">
+
+            <h1>Profili Düzenle</h1>
+            <div class="subtitle">Profil bilgilerini ve görünümünü buradan güncelleyebilirsin.</div>
+
+            <div class="media-section">
+                <div class="banner-preview">
+                    @if (!string.IsNullOrEmpty(Model.BannerUrl))
+                    {
+                        <img id="bannerPreview" src="@Model.BannerUrl" alt="Banner">
+                    }
+                    else
+                    {
+                        <span id="bannerPlaceholder">Banner Önizleme</span>
+                        <img id="bannerPreview" src="" alt="Banner" style="display: none;">
+                    }
+                    <label class="upload-btn">
+                        Banner Yükle
+                        <input type="file" name="BannerFile" accept="image/*" style="display: none;" onchange="previewBanner(event)">
+                    </label>
+                </div>
+
+                <div class="avatar-preview">
+                    <img id="avatarPreview" src="@(string.IsNullOrEmpty(Model.ProfilePictureUrl) ? "/images/default-avatar.png" : Model.ProfilePictureUrl)" alt="Avatar">
+                    <label class="upload-btn" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
+                        Fotoğraf
+                        <input type="file" name="ProfilePictureFile" accept="image/*" style="display: none;" onchange="previewAvatar(event)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Kullanıcı Adı</label>
+                <input type="text" asp-for="Username" placeholder="Kullanıcı adınız" />
+            </div>
+
+            <div style="display: flex; gap: 20px; margin-bottom: 24px;">
+                <div style="flex: 1;">
+                    <label>Ad</label>
+                    <input type="text" asp-for="Ad" placeholder="Adın" />
+                </div>
+                <div style="flex: 1;">
+                    <label>Soyad</label>
+                    <input type="text" asp-for="Soyad" placeholder="Soyadın" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Hakkımda</label>
+                <textarea asp-for="Bio" placeholder="Kendinden kısaca bahset"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Favori Film</label>
+                <input type="text" asp-for="FavoriteMovie" class="fav-film-input" placeholder="En sevdiğin filmi yaz..." />
+            </div>
+
+            <div class="actions">
+                <div class="actions-left">
+                    <button type="submit" class="save">Değişiklikleri Kaydet</button>
+                    <a asp-controller="Account" asp-action="Profile" class="cancel">İptal</a>
+                </div>
+
+                <button type="button" class="danger" onclick="if(confirm('Hesabınızı silmek istediğinize emin misiniz?')) { window.location.href='@Url.Action("DeleteAccount", "Account")'; }">Hesabı Sil</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        function previewBanner(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('bannerPreview');
+                    const placeholder = document.getElementById('bannerPlaceholder');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+</body>
+</html>

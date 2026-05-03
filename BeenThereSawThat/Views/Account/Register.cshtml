@@ -1,0 +1,234 @@
+﻿@model BeenThereSawThat.Models.RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kayıt Ol - Been There Saw That</title>
+    <style>
+        /* 1. Genel Sayfa Ayarları - Sabit Genişlik */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #f3efd9;
+            /* Mobil uyumluluğu kaldırmak için minimum genişlik */
+            min-width: 1200px;
+        }
+
+        .kayit-konteynir {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* 2. Sol Bölüm (Görsel ve Ana Buton) */
+        .sol-bolum {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            min-width: 600px; /* Sabitlik için */
+        }
+
+            .sol-bolum::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('/images/arka-plan.jpeg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                z-index: 1;
+            }
+
+        .ana-baslik, .kaydet-butonu {
+            position: relative;
+            z-index: 2;
+        }
+
+        .ana-baslik {
+            color: white;
+            font-size: 6rem; /* Sabit boyut */
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-shadow: 4px 4px 15px rgba(0,0,0,0.8);
+            letter-spacing: -2px;
+            font-family: 'Archivo Black', sans-serif; /* Önceki tasarımla uyum için */
+        }
+
+        .kaydet-butonu {
+            background-color: #f1d44b;
+            color: #1a1a1a;
+            border: none;
+            padding: 18px 80px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+            .kaydet-butonu:hover {
+                transform: scale(1.05);
+                background-color: #ffd900;
+            }
+
+        /* 3. Sağ Bölüm (Form Alanı) */
+        .sag-bolum {
+            flex: 1;
+            background-color: #f3efd9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 50px;
+            z-index: 3;
+            min-width: 600px; /* Sabitlik için */
+        }
+
+        .etiket {
+            color: #d4b841;
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0 5px 0;
+            font-size: 1.1rem;
+            text-transform: lowercase;
+        }
+
+        /* 4. Form Elemanları */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            background-color: #000000;
+            color: #f1d44b;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            padding: 14px 25px;
+            margin: 8px 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+            outline: none;
+        }
+
+            input:focus, select:focus {
+                border: 2px solid #f1d44b;
+            }
+
+        .satir {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+
+        /* 5. Cinsiyet Butonları */
+        .cinsiyet-btn {
+            flex: 1;
+            background-color: #000000;
+            color: #f1d44b;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            padding: 12px 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .cinsiyet-btn.active {
+                background-color: #f1d44b;
+                color: #000000;
+                font-weight: bold;
+                border: 2px solid #000000;
+            }
+
+        .uc-kolon select {
+            flex: 1;
+        }
+
+        ::placeholder {
+            color: #f1d44b;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kayit-konteynir">
+        <div class="sol-bolum">
+            <h1 class="ana-baslik">kayıt ol</h1>
+            <button type="submit" form="kayitFormu" class="kaydet-butonu">kaydet</button>
+        </div>
+
+        <div class="sag-bolum">
+            <form id="kayitFormu" asp-action="Register" method="post">
+                <div class="satir">
+                    <input type="text" asp-for="Ad" placeholder="ad" required>
+                    <input type="text" asp-for="Soyad" placeholder="soyad" required>
+                </div>
+
+                <p class="etiket">doğum tarihi</p>
+                <div class="satir uc-kolon">
+                    <select asp-for="Gun">
+                        @for (int i = 1; i <= 31; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+
+                    <select asp-for="Ay">
+                        @{
+                            string[] aylar = { "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" };
+                        }
+                        @foreach (var ay in aylar)
+                        {
+                            <option value="@ay">@ay</option>
+                        }
+                    </select>
+
+                    <select asp-for="Yil">
+                        @for (int i = DateTime.Now.Year; i >= 1905; i--)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+
+                <p class="etiket">cinsiyet</p>
+                <div class="satir cinsiyet-grup">
+                    <input type="hidden" asp-for="Cinsiyet" id="selectedCinsiyet" />
+                    <button type="button" class="cinsiyet-btn" onclick="selectGender(this, 'kadın')">kadın</button>
+                    <button type="button" class="cinsiyet-btn" onclick="selectGender(this, 'erkek')">erkek</button>
+                    <button type="button" class="cinsiyet-btn" onclick="selectGender(this, 'belirtmek istemiyorum')">belirtmek istemiyorum</button>
+                </div>
+
+                <input type="email" asp-for="Eposta" placeholder="e-posta" required>
+                <input type="text" asp-for="KullaniciAdi" placeholder="kullanıcı adı" required>
+                <input type="password" asp-for="Sifre" placeholder="şifre" required>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function selectGender(element, value) {
+            document.querySelectorAll('.cinsiyet-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('selectedCinsiyet').value = value;
+        }
+    </script>
+
+</body>
+</html>

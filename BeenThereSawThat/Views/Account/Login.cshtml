@@ -1,0 +1,158 @@
+﻿@model BeenThereSawThat.Models.LoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş Yap - Been There Saw That</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Global Ayarlar - Kaydırma çubuklarına izin veriyoruz */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            min-width: 1200px; /* Sayfanın daralmasını engeller */
+            font-family: 'Archivo Black', sans-serif;
+            background-color: #000;
+        }
+
+        /* Arka Plan */
+        .bg-image {
+            background-image: url('/images/interstellar.jpeg');
+            height: 100vh;
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .content-overlay {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Sabit Boyutlu Başlık */
+        h1.title {
+            color: #F5E6CC;
+            font-size: 80px; /* Sabit px */
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: -2px;
+            text-transform: lowercase;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Sabit Boyutlu Giriş Kartı */
+        .login-card {
+            background-color: rgba(245, 230, 204, 0.85);
+            padding: 50px;
+            border-radius: 20px;
+            width: 450px; /* Genişlik sabitlendi */
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        /* Input Alanları */
+        .input-field {
+            background-color: #000;
+            color: #F5E6CC;
+            border: 1px solid #4A3222;
+            border-radius: 30px;
+            padding: 18px 25px;
+            width: 350px; /* Sabit px */
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            outline: none;
+        }
+
+        /* Seçenekler */
+        .options {
+            width: 350px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #333;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+            .options a {
+                color: #4A3222;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+        /* Giriş Butonu */
+        .login-btn {
+            margin-top: 30px;
+            background-color: #4A3222;
+            color: #F5E6CC;
+            border: none;
+            padding: 18px 0;
+            width: 350px; /* Sabit px */
+            border-radius: 40px;
+            font-size: 20px;
+            font-family: 'Archivo Black', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-transform: lowercase;
+        }
+
+            .login-btn:hover {
+                background-color: #5D4037;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="bg-image">
+        <div class="content-overlay">
+
+            <h1 class="title">giriş yap</h1>
+
+            <div class="login-card">
+                <form asp-action="Login" method="post">
+
+                    <input asp-for="KullaniciAdi" type="text" class="input-field" placeholder="kullanıcı adı" required>
+
+                    <input asp-for="Sifre" type="password" class="input-field" placeholder="şifre" required>
+
+                    <div class="options">
+                        <label style="cursor:pointer">
+                            <input asp-for="BeniHatirla" type="checkbox"> beni hatırla
+                        </label>
+                        <a href="#">şifremi unuttum</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">giriş</button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
